@@ -34,4 +34,9 @@ public class Student {
 	public int getStudentNumber() {
 		return studentNumber;
 	}
+	
+	@Override
+	public String toString() {
+		return day + "," + period + "," + firstName + "," + lastName + "," + studentNumber;
+	}
 }
