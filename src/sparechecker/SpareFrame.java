@@ -1,14 +1,35 @@
 package sparechecker;
 
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SpareChecker {
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-	public static void main(String[] args) throws IOException {
+public class SpareFrame extends JFrame {
+
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					SpareFrame frame = new SpareFrame();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		String pathSpareFile1 = "data/spare file day 1.csv"; 
 		String pathSpareFile2 = "data/spare file day 2.csv"; 
 		ArrayList<Student> day1Per1= new ArrayList<>();
@@ -44,9 +65,13 @@ public class SpareChecker {
 						break;
 				}			
 			}
+			br.close();
 		}
 		catch(FileNotFoundException e) {
 			System.out.println("spare file day 1.csv not found");
+		}
+		catch(IOException e) {
+			e.printStackTrace();
 		}
 		try { 
 			FileReader fr = new FileReader(pathSpareFile2);
@@ -72,9 +97,13 @@ public class SpareChecker {
 						break;
 				}
 			}
+			br.close();
 		}
 		catch(FileNotFoundException e) {
-			System.out.println("spare file day 1.csv not found");
+			System.out.println("spare file day 2.csv not found");
+		}
+		catch(IOException e) {
+			e.printStackTrace();
 		}
 		for(Student s : day1Per1) {
 			System.out.println(s);
@@ -100,6 +129,18 @@ public class SpareChecker {
 		for(Student s : day2Per4) {
 			System.out.println(s);
 		}
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public SpareFrame() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		setContentPane(contentPane);
 	}
 
 }
