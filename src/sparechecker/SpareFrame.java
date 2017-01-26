@@ -1,6 +1,5 @@
 package sparechecker;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -10,12 +9,24 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 public class SpareFrame extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textField;
 
+	private static String pathSpareFile1 = "data/spare file day 1.csv"; 
+	private static String pathSpareFile2 = "data/spare file day 2.csv"; 
+	private static ArrayList<Student> day1Per1= new ArrayList<>();
+	private static ArrayList<Student> day1Per2= new ArrayList<>();
+	private static ArrayList<Student> day1Per3= new ArrayList<>();
+	private static ArrayList<Student> day1Per4= new ArrayList<>();
+	private static ArrayList<Student> day2Per1= new ArrayList<>();
+	private static ArrayList<Student> day2Per2= new ArrayList<>();
+	private static ArrayList<Student> day2Per3= new ArrayList<>();
+	private static ArrayList<Student> day2Per4= new ArrayList<>();
 	/**
 	 * Launch the application.
 	 */
@@ -25,22 +36,35 @@ public class SpareFrame extends JFrame {
 				try {
 					SpareFrame frame = new SpareFrame();
 					frame.setVisible(true);
+					frame.setResizable(false);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		String pathSpareFile1 = "data/spare file day 1.csv"; 
-		String pathSpareFile2 = "data/spare file day 2.csv"; 
-		ArrayList<Student> day1Per1= new ArrayList<>();
-		ArrayList<Student> day1Per2= new ArrayList<>();
-		ArrayList<Student> day1Per3= new ArrayList<>();
-		ArrayList<Student> day1Per4= new ArrayList<>();
-		ArrayList<Student> day2Per1= new ArrayList<>();
-		ArrayList<Student> day2Per2= new ArrayList<>();
-		ArrayList<Student> day2Per3= new ArrayList<>();
-		ArrayList<Student> day2Per4= new ArrayList<>();
 		
+		
+		readCsvFiles();
+		
+	}
+	/**
+	 * Create the frame.
+	 */
+	public SpareFrame() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1100, 800);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(450, 13, 200, 33);
+		contentPane.add(textField);
+		textField.setColumns(10);
+	}
+	
+	private static void readCsvFiles() {
 		try { 
 			FileReader fr = new FileReader(pathSpareFile1);
 			BufferedReader br = new BufferedReader(fr);
@@ -105,42 +129,5 @@ public class SpareFrame extends JFrame {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
-		for(Student s : day1Per1) {
-			System.out.println(s);
-		}
-		for(Student s : day1Per2) {
-			System.out.println(s);
-		}
-		for(Student s : day1Per3) {
-			System.out.println(s);
-		}
-		for(Student s : day1Per4) {
-			System.out.println(s);
-		}
-		for(Student s : day2Per1) {
-			System.out.println(s);
-		}
-		for(Student s : day2Per2) {
-			System.out.println(s);
-		}
-		for(Student s : day2Per3) {
-			System.out.println(s);
-		}
-		for(Student s : day2Per4) {
-			System.out.println(s);
-		}
 	}
-
-	/**
-	 * Create the frame.
-	 */
-	public SpareFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-	}
-
 }
