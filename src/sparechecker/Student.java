@@ -1,26 +1,28 @@
 package sparechecker;
 
+import java.util.Arrays;
+
 public class Student {
-	private int day;
-	private int period;
+	private boolean[] spares;
 	private String firstName;
 	private String lastName;
 	private int studentNumber;
 	
-	public Student(int day, int period, String firstName, String lastName, int studentNumber) {
-		this.day = day;
-		this.period = period;
+	public Student(int period, String firstName, String lastName, int studentNumber) {
+		spares = new boolean[8];
+		Arrays.fill(spares, false);
+		spares[period] = true;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.studentNumber = studentNumber;
 	}
-
-	public int getDay() {
-		return day;
+	
+	public void addSpare(int period) {
+		spares[period] = true;
 	}
 
-	public int getPeriod() {
-		return period;
+	public boolean ifSpare(int period) {
+		return spares[period];
 	}
 
 	public String getFirstName() {
@@ -35,8 +37,14 @@ public class Student {
 		return studentNumber;
 	}
 	
-	@Override
+	@Override 
 	public String toString() {
-		return day + "," + period + "," + firstName + "," + lastName + "," + studentNumber;
+		String spareString = "";
+		for(int i = 0; i < spares.length; i++) {
+			if (spares[i]) {
+				spareString += (char)(65+i);
+			}
+		}
+		return firstName + lastName + studentNumber ;
 	}
 }
