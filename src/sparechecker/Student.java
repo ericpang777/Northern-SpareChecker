@@ -45,6 +45,6 @@ public class Student {
 				spareString += (char)(65+i);
 			}
 		}
-		return firstName + lastName + studentNumber ;
+		return firstName + " " + lastName + " " + studentNumber + " " + spareString;
 	}
 }

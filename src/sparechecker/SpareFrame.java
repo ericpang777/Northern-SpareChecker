@@ -19,7 +19,7 @@ public class SpareFrame extends JFrame {
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
 
-	private static ArrayList<Student> students = new ArrayList<>();
+	private static ArrayList<Student> students;
 
 	/**
 	 * Launch the application.
@@ -54,6 +54,7 @@ public class SpareFrame extends JFrame {
 	}
 
 	private static void readCsvFiles() {
+		students = new ArrayList<>();
 		try {
 			FileReader fr = new FileReader(pathSpareFile1);
 			BufferedReader br = new BufferedReader(fr);
@@ -67,14 +68,17 @@ public class SpareFrame extends JFrame {
 					students.add(new Student(Integer.parseInt(values[0]) - 1, values[1], values[2],
 							Integer.parseInt(values[3])));
 				} else {
-					for (int i = 0; i < students.size(); i++) {
+					boolean found = false;
+					for (int i = 0; i < students.size() && !found; i++) {
 						if (students.get(i).getStudentNumber() == Integer.parseInt(values[3])) {
-							// Spares numbered from 1 - 8, index is from 0-7
+							// Spares numbered from 1 - 4, index is from 0-3
 							students.get(i).addSpare(Integer.parseInt(values[0]) - 1);
-						} else {
-							students.add(new Student(Integer.parseInt(values[0]) - 1, values[1], values[2],
-									Integer.parseInt(values[3])));
+							found = true;
 						}
+					}
+					if (!found) {
+						students.add(new Student(Integer.parseInt(values[0]) - 1, values[1], values[2],
+								Integer.parseInt(values[3])));
 					}
 				}
 			}
@@ -94,17 +98,20 @@ public class SpareFrame extends JFrame {
 				values = line.split(",");
 
 				if (students.size() == 0) {
-					students.add(new Student(Integer.parseInt(values[0]) - 1, values[1], values[2],
+					students.add(new Student(Integer.parseInt(values[0]) + 3, values[1], values[2],
 							Integer.parseInt(values[3])));
 				} else {
-					for (int i = 0; i < students.size(); i++) {
+					boolean found = false;
+					for (int i = 0; i < students.size() && !found; i++) {
 						if (students.get(i).getStudentNumber() == Integer.parseInt(values[3])) {
-							// Spares numbered from 1 - 8, index is from 0-7
-							students.get(i).addSpare(Integer.parseInt(values[0]) - 1);
-						} else {
-							students.add(new Student(Integer.parseInt(values[0]) - 1, values[1], values[2],
-									Integer.parseInt(values[3])));
+							// Spares numbered from 1-4, index is from 4-7
+							students.get(i).addSpare(Integer.parseInt(values[0]) + 3);
+							found = true;
 						}
+					}
+					if (!found) {
+						students.add(new Student(Integer.parseInt(values[0]) + 3, values[1], values[2],
+								Integer.parseInt(values[3])));
 					}
 				}
 			}
