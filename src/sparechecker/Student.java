@@ -21,7 +21,7 @@ public class Student {
 		spares[period] = true;
 	}
 
-	public boolean ifSpare(int period) {
+	public boolean hasSpare(int period) {
 		return spares[period];
 	}
 
