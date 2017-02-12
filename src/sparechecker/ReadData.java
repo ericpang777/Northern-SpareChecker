@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ReadData {
 	private static ArrayList<Student> students;
@@ -80,9 +82,6 @@ public class ReadData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		for (Student s : students) {
-			System.out.println(s);
-		}
 		return students;
 	}
 	
@@ -91,6 +90,13 @@ public class ReadData {
 			if(s.hasSpare(period)) {
 				list.add(s);
 			}
+		}
+	}
+	
+	public static void sortByFirstName(ArrayList<Student> list) {
+		Collections.sort(list, Comparator.comparing(Student::getFirstName));
+		for(Student s: list) {
+			System.out.println(s);
 		}
 	}
 }

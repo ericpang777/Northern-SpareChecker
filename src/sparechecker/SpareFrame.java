@@ -1,15 +1,21 @@
 package sparechecker;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.plaf.basic.BasicArrowButton;
 
 public class SpareFrame extends JFrame {
 
@@ -17,15 +23,19 @@ public class SpareFrame extends JFrame {
 	private JTextField textField;
 
 	private static ArrayList<Student> students;
-	private static ArrayList<Student> periodA;
-	private static ArrayList<Student> periodB;
-	private static ArrayList<Student> periodC;
-	private static ArrayList<Student> periodD;
-	private static ArrayList<Student> periodE;
-	private static ArrayList<Student> periodF;
-	private static ArrayList<Student> periodG;
-	private static ArrayList<Student> periodH;
-	private JTable table;
+	//Lists of students in each period
+	private static ArrayList<Student> perA = new ArrayList<Student>();
+	private static ArrayList<Student> perB = new ArrayList<Student>();
+	private static ArrayList<Student> perC = new ArrayList<Student>();
+	private static ArrayList<Student> perD = new ArrayList<Student>();
+	private static ArrayList<Student> perE = new ArrayList<Student>();
+	private static ArrayList<Student> perF = new ArrayList<Student>();
+	private static ArrayList<Student> perG = new ArrayList<Student>();
+	private static ArrayList<Student> perH = new ArrayList<Student>();
+	private static ArrayList<ArrayList<Student>> periods = new ArrayList<ArrayList<Student>>();
+	
+	//0 for A, 7 for H
+	private static int activePeriod = 0;
 
 	/**
 	 * Launch the application.
@@ -38,12 +48,14 @@ public class SpareFrame extends JFrame {
 					SpareFrame frame = new SpareFrame();
 					frame.setVisible(true);
 					frame.setResizable(false);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 
+		
 		students = ReadData.read();
 		sortStudents();
 	}
@@ -60,34 +72,72 @@ public class SpareFrame extends JFrame {
 		contentPane.setLayout(null);
 
 		textField = new JTextField();
-		textField.setBounds(284, 13, 200, 33);
+		textField.setBounds(412, 13, 334, 33);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		String[] col = {"First Name", "Last Name", "Student Number"};
-		DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-
-		table = new JTable(tableModel);
-		table.setBounds(61, 116, 676, 624);
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setVisible(true);
-		add(scrollPane);
-		contentPane.add(table);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(412, 111, 334, 604);
+		contentPane.add(scrollPane);
 		
-		for(Student s : students) {
-			Object[] data = {s.getFirstName(), s.getLastName(), s.getStudentNumber()};
-			tableModel.addRow(data);
+		JTextPane txtpn = new JTextPane();
+		txtpn.setBackground(Color.LIGHT_GRAY);
+		txtpn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		txtpn.setText("Period " + (char)((activePeriod % 8) + 65));
+		txtpn.setEditable(false);
+		txtpn.setBounds(164, 13, 77, 33);
+		contentPane.add(txtpn);
+		
+		BasicArrowButton leftArrowButton = new BasicArrowButton(BasicArrowButton.WEST);
+		leftArrowButton.setBounds(253, 13, 37, 33);
+		leftArrowButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				activePeriod--;
+				txtpn.setText("Period " + (char)(Math.abs((activePeriod % 8)) + 65));
+			}
+		});
+		
+		BasicArrowButton rightArrowButton = new BasicArrowButton(BasicArrowButton.EAST);
+		rightArrowButton.setBounds(290, 13, 37, 33);
+		rightArrowButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				activePeriod++;
+				txtpn.setText("Period " + (char)(Math.abs((activePeriod % 8)) + 65));
+			}
+		});
+		
+		JList<String> list = new JList<String>(new DefaultListModel<String>());
+		list.setCellRenderer(new StripeRenderer());
+		list.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+		scrollPane.setViewportView(list);	
+		for(Student s : periods.get(0)) {
+			((DefaultListModel)list.getModel()).addElement(s.getFirstName() +" "+ s.getLastName());
 		}
+		
+		
+		contentPane.add(leftArrowButton);
+		contentPane.add(rightArrowButton);
+		
+		
+		contentPane.setVisible(true);
+		
 	}
 	
 	private static void sortStudents() {
-		ReadData.sortByPeriod(periodA = new ArrayList<>(), 0);
-		ReadData.sortByPeriod(periodB = new ArrayList<>(), 1);
-		ReadData.sortByPeriod(periodC = new ArrayList<>(), 2);
-		ReadData.sortByPeriod(periodD = new ArrayList<>(), 3);
-		ReadData.sortByPeriod(periodE = new ArrayList<>(), 4);
-		ReadData.sortByPeriod(periodF = new ArrayList<>(), 5);
-		ReadData.sortByPeriod(periodG = new ArrayList<>(), 6);
-		ReadData.sortByPeriod(periodH = new ArrayList<>(), 7);
+		periods.add(perA);
+		periods.add(perB);
+		periods.add(perC);
+		periods.add(perD);
+		periods.add(perE);
+		periods.add(perF);
+		periods.add(perG);
+		periods.add(perH);
+		for(int i = 0; i < periods.size(); i++) {
+			ReadData.sortByPeriod(periods.get(i), i);
+			ReadData.sortByFirstName(periods.get(i));
+		}
+		System.out.println(-3 % 4);
 	}
 }
