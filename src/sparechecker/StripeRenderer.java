@@ -8,7 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 class StripeRenderer extends DefaultListCellRenderer {
-
+	
+	/**
+	 * Colours every odd row, a light gray colour. Creates zebra stripe effect
+	 */
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {

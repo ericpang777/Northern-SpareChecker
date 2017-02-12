@@ -14,7 +14,7 @@ public class ReadData {
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
 	
-	public static ArrayList<Student> read() {
+	public static void read() {
 		students = new ArrayList<>();
 		try {
 			FileReader fr = new FileReader(pathSpareFile1);
@@ -82,7 +82,6 @@ public class ReadData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return students;
 	}
 	
 	public static void sortByPeriod(ArrayList<Student> list, int period) {
