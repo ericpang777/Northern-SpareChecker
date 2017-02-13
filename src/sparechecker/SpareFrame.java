@@ -3,13 +3,22 @@ package sparechecker;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,6 +34,9 @@ import javax.swing.text.StyledDocument;
 
 public class SpareFrame extends JFrame {
 
+	private static final int IMG_WIDTH = 142;
+	private static final int IMG_HEIGHT = 180;
+
 	private JPanel contentPane;
 
 	//Lists of students in each period
@@ -32,7 +44,7 @@ public class SpareFrame extends JFrame {
 	
 	//0 for A, 7 for H
 	private static int activePeriod = 0;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -60,56 +72,60 @@ public class SpareFrame extends JFrame {
 	 */
 	public SpareFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1100, 800);
+		setBounds(100, 100, 633, 579);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		//Field to search for student
-		JTextField searchField = new JTextField();
-		searchField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		searchField.setBounds(647, 75, 214, 33);
-		searchField.setColumns(10);
-		searchField.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(searchField.getText() != null) {
-					
-				}
-			}
-			
-		});
-		contentPane.add(searchField);
 		
+		JButton btnSignIn = new JButton("Sign In");
+		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSignIn.setBounds(472, 75, 108, 31);
+		contentPane.add(btnSignIn);
+		
+		JLabel imageLabel = new JLabel("");
+		imageLabel.setBounds(43, 73, 142, 180);
+		contentPane.add(imageLabel);
+		
+		//Shows student's first and last names
 		JTextPane nameText = new JTextPane();
 		nameText.setEditable(false);
 		nameText.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		nameText.setBounds(35, 580, 214, 33);
+		nameText.setBounds(12, 262, 214, 33);
 		//Horizontally Center
 		StyledDocument doc = nameText.getStyledDocument();
 		SimpleAttributeSet center = new SimpleAttributeSet();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		nameText.setOpaque(false);
+		nameText.setBorder(BorderFactory.createEmptyBorder());
+		nameText.setBackground(new Color(0,0,0,0));
 		contentPane.add(nameText);
 		
+		//Shows student's student number
 		JTextPane stuNumText = new JTextPane();
 		stuNumText.setEditable(false);
 		stuNumText.setFont(new Font("Segoe UI", Font.PLAIN, 17));
-		stuNumText.setBounds(67, 615, 146, 22);
+		stuNumText.setBounds(39, 286, 146, 22);
 		//Horizontally Center
 		doc = stuNumText.getStyledDocument();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		stuNumText.setOpaque(false);
+		stuNumText.setBorder(BorderFactory.createEmptyBorder());
+		stuNumText.setBackground(new Color(0,0,0,0));
 		contentPane.add(stuNumText);
 		
 		JTextPane signInTime = new JTextPane();
-		signInTime.setBounds(12, 650, 263, 40);
+		signInTime.setBounds(22, 308, 190, 40);
+		signInTime.setOpaque(false);
+		signInTime.setBorder(BorderFactory.createEmptyBorder());
+		signInTime.setBackground(new Color(0,0,0,0));
 		contentPane.add(signInTime);
 		
 		//Makes list scrollable
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(647, 136, 334, 604);
+		scrollPane.setBounds(246, 136, 334, 297);
 		contentPane.add(scrollPane);
 		
 		//Shows the active period
@@ -118,7 +134,7 @@ public class SpareFrame extends JFrame {
 		periodtxtpn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
 		periodtxtpn.setEditable(false);
-		periodtxtpn.setBounds(718, 13, 77, 33);
+		periodtxtpn.setBounds(295, 13, 77, 33);
 		contentPane.add(periodtxtpn);
 		
 		//Shows list of all spare students
@@ -131,6 +147,12 @@ public class SpareFrame extends JFrame {
 				if(!list.isSelectionEmpty()) {
 					nameText.setText(list.getSelectedValue().toString());
 					stuNumText.setText(String.valueOf(list.getSelectedValue().getStudentNumber()));
+					try {
+						Image image = ImageIO.read(new File("images/" + list.getSelectedValue().getStudentNumber() + ".BMP"));
+						imageLabel.setIcon(new ImageIcon(image));
+					} catch (IOException e1) {
+						imageLabel.setIcon(null);
+					}
 					repaint();
 				}	
 				else
@@ -144,9 +166,37 @@ public class SpareFrame extends JFrame {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
 		
+		//Field to search for student
+		JTextField searchField = new JTextField();
+		searchField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		searchField.setBounds(246, 73, 214, 33);
+		searchField.setColumns(10);
+		searchField.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(searchField.getText() != null) {
+					((DefaultListModel<Student>)list.getModel()).removeAllElements();
+					for(Student s : periods.get(activePeriod % 8)) {
+						if(s.getFirstName().toLowerCase().contains(searchField.getText().toLowerCase()) 	|| 
+								s.getLastName().toLowerCase().contains(searchField.getText().toLowerCase()) ||
+								(s.getFirstName() + " " + s.getLastName()).toLowerCase().contains(searchField.getText().toLowerCase())) {
+							((DefaultListModel<Student>)list.getModel()).addElement(s);
+						}
+					}
+				}	
+			}	
+		});
+		contentPane.add(searchField);
+		
 		//Left arrow button that moves the period back by one
 		BasicArrowButton leftArrowButton = new BasicArrowButton(BasicArrowButton.WEST);
-		leftArrowButton.setBounds(802, 13, 37, 33);
+		leftArrowButton.setBounds(384, 13, 37, 33);
 		leftArrowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -154,9 +204,9 @@ public class SpareFrame extends JFrame {
 				if(activePeriod == 0)
 					activePeriod += 8;
 				activePeriod--;
-				periodtxtpn.setText("Period " + (char)(Math.abs((activePeriod % 8)) + 65));
+				periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(Math.abs(activePeriod % 8))) {
+				for(Student s : periods.get(activePeriod % 8)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 			}
@@ -165,27 +215,19 @@ public class SpareFrame extends JFrame {
 		
 		//Right arrow button that moves the period forward by one
 		BasicArrowButton rightArrowButton = new BasicArrowButton(BasicArrowButton.EAST);
-		rightArrowButton.setBounds(837, 13, 37, 33);
+		rightArrowButton.setBounds(423, 13, 37, 33);
 		rightArrowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				activePeriod++;
-				periodtxtpn.setText("Period " + (char)(Math.abs((activePeriod % 8)) + 65));
+				periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(Math.abs(activePeriod % 8))) {
+				for(Student s : periods.get(activePeriod % 8)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 			}
 		});
-		contentPane.add(rightArrowButton);
-		
-		JButton btnSignIn = new JButton("Sign In");
-		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSignIn.setBounds(873, 75, 108, 31);
-		contentPane.add(btnSignIn);
-		
-		
-				
+		contentPane.add(rightArrowButton);				
 		contentPane.setVisible(true);	
 	}
 	
