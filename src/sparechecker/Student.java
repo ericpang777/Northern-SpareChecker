@@ -39,12 +39,6 @@ public class Student {
 	
 	@Override 
 	public String toString() {
-		String spareString = "";
-		for(int i = 0; i < spares.length; i++) {
-			if (spares[i]) {
-				spareString += (char)(65+i);
-			}
-		}
-		return firstName + " " + lastName + " " + studentNumber + " " + spareString;
+		return firstName + " " + lastName;
 	}
 }
