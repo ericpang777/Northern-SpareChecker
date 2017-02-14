@@ -170,7 +170,7 @@ public class SpareFrame extends JFrame {
 							spares += (char)(i + 65);
 					}
 					spareText.setText("Period " + spares);
-					signInTime.setText("Last Sign In: " + StudentIO.lastSignIn(s));
+					signInTime.setText("Last Sign In: \n" + StudentIO.lastSignIn(s));
 					try {
 						Image image = ImageIO.read(new File("images/" + s.getStudentNumber() + ".BMP"));
 						imageLabel.setIcon(new ImageIcon(image));

@@ -118,8 +118,8 @@ public class StudentIO {
 			String[] values;
 			while ((line = br.readLine()) != null) {
 				values = line.split(",");
-				if (values[4].equals(String.valueOf(s.getStudentNumber()))) {
-					lastDate = values[5];
+				if (values[3].equals(String.valueOf(s.getStudentNumber()))) {
+					lastDate = values[4];
 				}
 			}
 			br.close();
