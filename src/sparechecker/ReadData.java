@@ -94,7 +94,12 @@ public class ReadData {
 	}
 	
 	public static void sortByFirstName(ArrayList<Student> list) {
-		Collections.sort(list, Comparator.comparing(Student::getFirstName));
+		Collections.sort(list, new Comparator<Student>() {
+			@Override
+			public int compare(Student s1, Student s2) {
+				return s1.getFirstName().compareTo(s2.getFirstName());
+			}
+		});
 	}
 	
 	public static String lastSignIn(Student s) {
@@ -112,7 +117,7 @@ public class ReadData {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			return lastDate;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
