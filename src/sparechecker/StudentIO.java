@@ -1,20 +1,27 @@
 package sparechecker;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
-public class ReadData {
+public class StudentIO {
 	private static ArrayList<Student> students;
+	private static FileWriter fw;
+	private static BufferedWriter bw;
 	
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
 	private static String pathLog = "log.csv";
-	
+
 	public static void read() {
 		students = new ArrayList<>();
 		try {
@@ -84,15 +91,15 @@ public class ReadData {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void sortByPeriod(ArrayList<Student> list, int period) {
-		for(Student s : students) {
-			if(s.hasSpare(period)) {
+		for (Student s : students) {
+			if (s.hasSpare(period)) {
 				list.add(s);
 			}
 		}
 	}
-	
+
 	public static void sortByFirstName(ArrayList<Student> list) {
 		Collections.sort(list, new Comparator<Student>() {
 			@Override
@@ -101,7 +108,7 @@ public class ReadData {
 			}
 		});
 	}
-	
+
 	public static String lastSignIn(Student s) {
 		String lastDate = "";
 		try {
@@ -109,9 +116,9 @@ public class ReadData {
 			BufferedReader br = new BufferedReader(fr);
 			String line;
 			String[] values;
-			while((line = br.readLine()) != null) {
+			while ((line = br.readLine()) != null) {
 				values = line.split(",");
-				if(values[4].equals(String.valueOf(s.getStudentNumber()))) {
+				if (values[4].equals(String.valueOf(s.getStudentNumber()))) {
 					lastDate = values[5];
 				}
 			}
@@ -121,7 +128,34 @@ public class ReadData {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 	
+		}
 		return lastDate;
+	}
+	
+	public static void log(int period, Student s) throws IOException {
+		if(new File(pathLog).isFile()) {
+			try {
+				fw = new FileWriter(pathLog, true);
+				bw = new BufferedWriter(fw);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				fw = new FileWriter(pathLog);
+				bw = new BufferedWriter(fw);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("Period " + (char)(period + 65) + ",");
+		sb.append(s.getFirstName() + ",");
+		sb.append(s.getLastName() + ",");
+		sb.append(s.getStudentNumber() + ",");
+		sb.append(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		bw.append(sb.toString() + "\n");
+		bw.flush();
 	}
 }

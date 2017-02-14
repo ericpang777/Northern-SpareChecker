@@ -51,6 +51,8 @@ public class SpareFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					StudentIO.read();
+					sortStudents();
 					SpareFrame frame = new SpareFrame();
 					frame.setVisible(true);
 					frame.setResizable(false);
@@ -60,9 +62,6 @@ public class SpareFrame extends JFrame {
 				}
 			}
 		});
-
-		ReadData.read();
-		sortStudents();
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class SpareFrame extends JFrame {
 							spares += (char)(i + 65);
 					}
 					spareText.setText("Period " + spares);
-					signInTime.setText("Last Sign In: " + ReadData.lastSignIn(s));
+					signInTime.setText("Last Sign In: " + StudentIO.lastSignIn(s));
 					try {
 						Image image = ImageIO.read(new File("images/" + s.getStudentNumber() + ".BMP"));
 						imageLabel.setIcon(new ImageIcon(image));
@@ -198,7 +197,7 @@ public class SpareFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					LogData.log(activePeriod, list.getSelectedValue());
+					StudentIO.log(activePeriod, list.getSelectedValue());
 					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -277,8 +276,8 @@ public class SpareFrame extends JFrame {
 			periods.add(new ArrayList<Student>());
 		}
 		for(int i = 0; i < periods.size(); i++) {
-			ReadData.sortByPeriod(periods.get(i), i);
-			ReadData.sortByFirstName(periods.get(i));
+			StudentIO.sortByPeriod(periods.get(i), i);
+			StudentIO.sortByFirstName(periods.get(i));
 		}
 	}
 }
