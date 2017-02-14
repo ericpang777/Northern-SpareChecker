@@ -13,6 +13,7 @@ public class ReadData {
 	
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
+	private static String pathLog = "log.csv";
 	
 	public static void read() {
 		students = new ArrayList<>();
@@ -94,8 +95,28 @@ public class ReadData {
 	
 	public static void sortByFirstName(ArrayList<Student> list) {
 		Collections.sort(list, Comparator.comparing(Student::getFirstName));
-		for(Student s: list) {
-			System.out.println(s);
-		}
+	}
+	
+	public static String lastSignIn(Student s) {
+		String lastDate = "";
+		try {
+			FileReader fr = new FileReader(pathLog);
+			BufferedReader br = new BufferedReader(fr);
+			String line;
+			String[] values;
+			while((line = br.readLine()) != null) {
+				values = line.split(",");
+				if(values[4].equals(String.valueOf(s.getStudentNumber()))) {
+					lastDate = values[5];
+				}
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 	
+		return lastDate;
 	}
 }

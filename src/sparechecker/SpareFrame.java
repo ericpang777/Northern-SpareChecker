@@ -10,7 +10,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -50,7 +52,6 @@ public class SpareFrame extends JFrame {
 			public void run() {
 				try {
 					SpareFrame frame = new SpareFrame();
-					LogData.init();
 					frame.setVisible(true);
 					frame.setResizable(false);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -90,16 +91,32 @@ public class SpareFrame extends JFrame {
 		SimpleAttributeSet center = new SimpleAttributeSet();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		//Set transparent
 		nameText.setOpaque(false);
 		nameText.setBorder(BorderFactory.createEmptyBorder());
 		nameText.setBackground(new Color(0,0,0,0));
 		contentPane.add(nameText);
 		
+		//Shows spare periods
+		JTextPane spareText = new JTextPane();
+		spareText.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		spareText.setBounds(47, 286, 142, 33);
+		spareText.setEditable(false);
+		//Horizontally Center
+		doc = spareText.getStyledDocument();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		//Set transparent
+		spareText.setOpaque(false);
+		spareText.setBorder(BorderFactory.createEmptyBorder());
+		spareText.setBackground(new Color(0,0,0,0));
+		contentPane.add(spareText);
+		
 		//Shows student's student number
 		JTextPane stuNumText = new JTextPane();
 		stuNumText.setEditable(false);
 		stuNumText.setFont(new Font("Segoe UI", Font.PLAIN, 17));
-		stuNumText.setBounds(39, 286, 146, 22);
+		stuNumText.setBounds(43, 318, 146, 22);
 		//Horizontally Center
 		doc = stuNumText.getStyledDocument();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -111,7 +128,13 @@ public class SpareFrame extends JFrame {
 		
 		//Shows last sign in time of the student
 		JTextPane signInTime = new JTextPane();
-		signInTime.setBounds(22, 308, 190, 40);
+		signInTime.setEditable(false);
+		signInTime.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		signInTime.setBounds(12, 353, 214, 40);
+		//Horizontally Center
+		doc = signInTime.getStyledDocument();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 		signInTime.setOpaque(false);
 		signInTime.setBorder(BorderFactory.createEmptyBorder());
 		signInTime.setBackground(new Color(0,0,0,0));
@@ -139,11 +162,18 @@ public class SpareFrame extends JFrame {
 				if(e.getValueIsAdjusting())
 					return;
 				if(!list.isSelectionEmpty()) {
-					nameText.setText(list.getSelectedValue().toString());
-					stuNumText.setText(String.valueOf(list.getSelectedValue().getStudentNumber()));
-					
+					Student s = list.getSelectedValue();
+					nameText.setText(s.toString());
+					stuNumText.setText(String.valueOf(s.getStudentNumber()));
+					String spares = "";
+					for(int i = 0; i < 8; i++) {
+						if(s.hasSpare(i))
+							spares += (char)(i + 65);
+					}
+					spareText.setText("Period " + spares);
+					signInTime.setText("Last Sign In: " + ReadData.lastSignIn(s));
 					try {
-						Image image = ImageIO.read(new File("images/" + list.getSelectedValue().getStudentNumber() + ".BMP"));
+						Image image = ImageIO.read(new File("images/" + s.getStudentNumber() + ".BMP"));
 						imageLabel.setIcon(new ImageIcon(image));
 					} catch (IOException e1) {
 						imageLabel.setIcon(null);
@@ -163,12 +193,13 @@ public class SpareFrame extends JFrame {
 				
 		JButton btnSignIn = new JButton("Sign In");
 		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSignIn.setBounds(66, 361, 108, 31);
+		btnSignIn.setBounds(64, 402, 108, 31);
 		btnSignIn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					LogData.log(activePeriod, list.getSelectedValue());
+					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -237,7 +268,7 @@ public class SpareFrame extends JFrame {
 				}
 			}
 		});
-		contentPane.add(rightArrowButton);				
+		contentPane.add(rightArrowButton);		
 		contentPane.setVisible(true);	
 	}
 	

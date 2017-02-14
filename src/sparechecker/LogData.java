@@ -12,7 +12,7 @@ public class LogData {
 	private static BufferedWriter bw;
 	private static String path = "log.csv";
 	
-	public static void init() {
+	public static void log(int period, Student s) throws IOException {
 		if(new File(path).isFile()) {
 			try {
 				fw = new FileWriter(path, true);
@@ -29,9 +29,6 @@ public class LogData {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public static void log(int period, Student s) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Period " + (char)(period + 65) + ",");
 		sb.append(s.getFirstName() + ",");
