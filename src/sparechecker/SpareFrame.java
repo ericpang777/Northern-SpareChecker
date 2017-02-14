@@ -33,10 +33,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 public class SpareFrame extends JFrame {
-
-	private static final int IMG_WIDTH = 142;
-	private static final int IMG_HEIGHT = 180;
-
 	private JPanel contentPane;
 
 	//Lists of students in each period
@@ -54,6 +50,7 @@ public class SpareFrame extends JFrame {
 			public void run() {
 				try {
 					SpareFrame frame = new SpareFrame();
+					LogData.init();
 					frame.setVisible(true);
 					frame.setResizable(false);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,11 +75,7 @@ public class SpareFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnSignIn = new JButton("Sign In");
-		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSignIn.setBounds(472, 75, 108, 31);
-		contentPane.add(btnSignIn);
-		
+		//Contains student image
 		JLabel imageLabel = new JLabel("");
 		imageLabel.setBounds(43, 73, 142, 180);
 		contentPane.add(imageLabel);
@@ -116,6 +109,7 @@ public class SpareFrame extends JFrame {
 		stuNumText.setBackground(new Color(0,0,0,0));
 		contentPane.add(stuNumText);
 		
+		//Shows last sign in time of the student
 		JTextPane signInTime = new JTextPane();
 		signInTime.setBounds(22, 308, 190, 40);
 		signInTime.setOpaque(false);
@@ -147,6 +141,7 @@ public class SpareFrame extends JFrame {
 				if(!list.isSelectionEmpty()) {
 					nameText.setText(list.getSelectedValue().toString());
 					stuNumText.setText(String.valueOf(list.getSelectedValue().getStudentNumber()));
+					
 					try {
 						Image image = ImageIO.read(new File("images/" + list.getSelectedValue().getStudentNumber() + ".BMP"));
 						imageLabel.setIcon(new ImageIcon(image));
@@ -165,11 +160,26 @@ public class SpareFrame extends JFrame {
 		for(Student s : periods.get(activePeriod)) {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
+				
+		JButton btnSignIn = new JButton("Sign In");
+		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSignIn.setBounds(66, 361, 108, 31);
+		btnSignIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					LogData.log(activePeriod, list.getSelectedValue());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}	
+		});
+		contentPane.add(btnSignIn);
 		
 		//Field to search for student
 		JTextField searchField = new JTextField();
 		searchField.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		searchField.setBounds(246, 73, 214, 33);
+		searchField.setBounds(246, 73, 334, 33);
 		searchField.setColumns(10);
 		searchField.addKeyListener(new KeyListener() {
 			@Override
