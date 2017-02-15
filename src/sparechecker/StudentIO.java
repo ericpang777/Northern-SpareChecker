@@ -154,7 +154,7 @@ public class StudentIO {
 		sb.append(s.getFirstName() + ",");
 		sb.append(s.getLastName() + ",");
 		sb.append(s.getStudentNumber() + ",");
-		sb.append(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+		sb.append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
 		bw.append(sb.toString() + "\n");
 		bw.flush();
 	}

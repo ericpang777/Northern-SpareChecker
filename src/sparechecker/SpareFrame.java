@@ -198,7 +198,7 @@ public class SpareFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					StudentIO.log(activePeriod, list.getSelectedValue());
-					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
