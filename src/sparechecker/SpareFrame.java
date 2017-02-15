@@ -148,7 +148,7 @@ public class SpareFrame extends JFrame {
 		JTextPane periodtxtpn = new JTextPane();
 		periodtxtpn.setBackground(Color.LIGHT_GRAY);
 		periodtxtpn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
+		periodtxtpn.setText("Period " + (char)(activePeriod + 65));
 		periodtxtpn.setEditable(false);
 		periodtxtpn.setBounds(295, 13, 77, 33);
 		contentPane.add(periodtxtpn);
@@ -222,7 +222,7 @@ public class SpareFrame extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				if(searchField.getText() != null) {
 					((DefaultListModel<Student>)list.getModel()).removeAllElements();
-					for(Student s : periods.get(activePeriod % 8)) {
+					for(Student s : periods.get(activePeriod)) {
 						if(s.getFirstName().toLowerCase().contains(searchField.getText().toLowerCase()) 	|| 
 								s.getLastName().toLowerCase().contains(searchField.getText().toLowerCase()) ||
 								(s.getFirstName() + " " + s.getLastName()).toLowerCase().contains(searchField.getText().toLowerCase())) {
@@ -244,9 +244,9 @@ public class SpareFrame extends JFrame {
 				if(activePeriod == 0)
 					activePeriod += 8;
 				activePeriod--;
-				periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
+				periodtxtpn.setText("Period " + (char)(activePeriod + 65));
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(activePeriod % 8)) {
+				for(Student s : periods.get(activePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 			}
@@ -259,10 +259,13 @@ public class SpareFrame extends JFrame {
 		rightArrowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//Don't go over 7
+				if(activePeriod == 7)
+					activePeriod -= 8;
 				activePeriod++;
-				periodtxtpn.setText("Period " + (char)((activePeriod % 8) + 65));
+				periodtxtpn.setText("Period " + (char)(activePeriod + 65));
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(activePeriod % 8)) {
+				for(Student s : periods.get(activePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 			}
