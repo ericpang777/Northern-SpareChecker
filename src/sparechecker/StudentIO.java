@@ -22,8 +22,32 @@ public class StudentIO {
 	
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
+	private static String pathFile = "path.txt";
 	private static String pathLog = "log.csv";
 
+	public static void createPath() {
+		try {
+			FileReader pathFR = new FileReader(pathFile);
+			BufferedReader pathBR = new BufferedReader(pathFR);
+			pathSpareFile1 = pathBR.readLine();
+			pathSpareFile2 = pathBR.readLine();
+			pathBR.close();
+		} catch (FileNotFoundException e) {
+			try {
+				FileWriter pathFW = new FileWriter(pathFile);
+				BufferedWriter pathBW = new BufferedWriter(pathFW);
+				pathBW.append(pathSpareFile1 + "\n");
+				pathBW.append(pathSpareFile2);
+				pathBW.flush();
+				pathBW.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		} catch(IOException e) {
+			
+		}	
+	}
+	
 	public static void read() {
 		students = new ArrayList<>();
 		try {
@@ -55,7 +79,7 @@ public class StudentIO {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("spare file day 1.csv not found");
+			JOptionPane.showMessageDialog(SpareFrame.getFrame(), "Cannot find day 1 spare file", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -88,7 +112,7 @@ public class StudentIO {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("spare file day 2.csv not found");
+			JOptionPane.showMessageDialog(SpareFrame.getFrame(), "Cannot find day 2 spare file", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -159,5 +183,23 @@ public class StudentIO {
 		sb.append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
 		bw.append(sb.toString() + "\n");
 		bw.flush();
+	}
+	
+	public static void setPath(String path, int day) {
+		if(day == 1) 
+			pathSpareFile1 = path;
+		if(day == 2)
+			pathSpareFile2 = path;
+		try {
+			FileWriter pathFW = new FileWriter(pathFile);
+			BufferedWriter pathBW = new BufferedWriter(pathFW);
+			pathBW.append(pathSpareFile1);
+			pathBW.newLine();
+			pathBW.append(pathSpareFile2);
+			pathBW.flush();
+			pathBW.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -2,6 +2,7 @@ package sparechecker;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -38,6 +42,7 @@ public class SpareFrame extends JFrame {
 	private JPanel contentPane;
 	private JButton btnSignIn;
 	private static JFrame spareFrame;
+	private JList<Student> list; 
 	//Lists of students in each period
 	private static ArrayList<ArrayList<Student>> periods = new ArrayList<ArrayList<Student>>();
 	
@@ -48,7 +53,7 @@ public class SpareFrame extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-
+		StudentIO.createPath();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -70,6 +75,54 @@ public class SpareFrame extends JFrame {
 	 */
 	public SpareFrame() {
 		spareFrame = this;
+		this.setTitle("Spare Checker");
+		
+		JMenuBar menu = new JMenuBar();
+		JMenu edit = new JMenu("Edit");
+		JMenuItem file1 = new JMenuItem("Edit Spare File Day 1");
+		file1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fd = new FileDialog(spareFrame, "Choose a day 1 file", FileDialog.LOAD);
+				fd.setFile("*.csv");
+				fd.setVisible(true);
+				String pathName = fd.getDirectory() + fd.getFile();
+				if(fd.getFile() != null) {
+					StudentIO.setPath(pathName, 1);
+					StudentIO.read();
+					sortStudents();
+					((DefaultListModel<Student>)list.getModel()).removeAllElements();
+					for(Student s : periods.get(activePeriod)) {
+						((DefaultListModel<Student>)list.getModel()).addElement(s);
+					}
+				}
+			}
+			
+		});
+		JMenuItem file2 = new JMenuItem("Edit Spare File Day 2");
+		file2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FileDialog fd = new FileDialog(spareFrame, "Choose a day 2 file", FileDialog.LOAD);
+				fd.setFile("*.csv");
+				fd.setVisible(true);
+				String pathName = fd.getDirectory() + fd.getFile();
+				if(fd.getFile() != null) {
+					StudentIO.setPath(pathName, 2);
+					StudentIO.read();
+					sortStudents();
+					((DefaultListModel<Student>)list.getModel()).removeAllElements();
+					for(Student s : periods.get(activePeriod)) {
+						((DefaultListModel<Student>)list.getModel()).addElement(s);
+					}
+				}
+			}
+			
+		});
+		edit.add(file1);
+		edit.add(file2);
+		menu.add(edit);
+		setJMenuBar(menu);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 633, 579);
@@ -157,7 +210,7 @@ public class SpareFrame extends JFrame {
 		contentPane.add(periodtxtpn);
 		
 		//Shows list of all spare students
-		JList<Student> list = new JList<Student>(new DefaultListModel<Student>());
+		list = new JList<Student>(new DefaultListModel<Student>());
 		list.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -285,6 +338,7 @@ public class SpareFrame extends JFrame {
 	}
 	
 	private static void sortStudents() {
+		periods.clear();
 		for(int i = 0; i < 8; i++) {
 			periods.add(new ArrayList<Student>());
 		}
