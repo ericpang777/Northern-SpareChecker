@@ -36,7 +36,8 @@ import javax.swing.text.StyledDocument;
 
 public class SpareFrame extends JFrame {
 	private JPanel contentPane;
-
+	private JButton btnSignIn;
+	private static JFrame spareFrame;
 	//Lists of students in each period
 	private static ArrayList<ArrayList<Student>> periods = new ArrayList<ArrayList<Student>>();
 	
@@ -68,6 +69,8 @@ public class SpareFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public SpareFrame() {
+		spareFrame = this;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 633, 579);
 		contentPane = new JPanel();
@@ -161,6 +164,7 @@ public class SpareFrame extends JFrame {
 				if(e.getValueIsAdjusting())
 					return;
 				if(!list.isSelectionEmpty()) {
+					btnSignIn.setVisible(true);
 					Student s = list.getSelectedValue();
 					nameText.setText(s.toString());
 					stuNumText.setText(String.valueOf(s.getStudentNumber()));
@@ -194,7 +198,7 @@ public class SpareFrame extends JFrame {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
 				
-		JButton btnSignIn = new JButton("Sign In");
+		btnSignIn = new JButton("Sign In");
 		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnSignIn.setBounds(64, 402, 108, 31);
 		btnSignIn.addActionListener(new ActionListener() {
@@ -209,6 +213,7 @@ public class SpareFrame extends JFrame {
 			}	
 		});
 		contentPane.add(btnSignIn);
+		btnSignIn.setVisible(false);
 		
 		//Field to search for student
 		JTextField searchField = new JTextField();
@@ -253,6 +258,7 @@ public class SpareFrame extends JFrame {
 				for(Student s : periods.get(activePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
+				btnSignIn.setVisible(false);
 			}
 		});
 		contentPane.add(leftArrowButton);
@@ -272,10 +278,10 @@ public class SpareFrame extends JFrame {
 				for(Student s : periods.get(activePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
+				btnSignIn.setVisible(false);
 			}
 		});
-		contentPane.add(rightArrowButton);		
-		contentPane.setVisible(true);	
+		contentPane.add(rightArrowButton);	
 	}
 	
 	private static void sortStudents() {
@@ -286,5 +292,9 @@ public class SpareFrame extends JFrame {
 			StudentIO.sortByPeriod(periods.get(i), i);
 			StudentIO.sortByFirstName(periods.get(i));
 		}
+	}
+	
+	public static JFrame getFrame() {
+		return spareFrame;
 	}
 }
