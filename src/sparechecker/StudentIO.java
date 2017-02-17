@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 
 public class StudentIO {
 	private static ArrayList<Student> students;
-	private static FileWriter fw;
-	private static BufferedWriter bw;
+	private static FileWriter logFW;
+	private static BufferedWriter logBW;
 	
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
@@ -161,16 +161,16 @@ public class StudentIO {
 	public static void log(int period, Student s) throws IOException {
 		if(new File(pathLog).isFile()) {
 			try {
-				fw = new FileWriter(pathLog, true);
-				bw = new BufferedWriter(fw);
+				logFW = new FileWriter(pathLog, true);
+				logBW = new BufferedWriter(logFW);
 			} catch (FileNotFoundException e) {
 				JOptionPane.showMessageDialog(SpareFrame.getFrame(), "log.csv is currently open", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
 			try {
-				fw = new FileWriter(pathLog);
-				bw = new BufferedWriter(fw);
+				logFW = new FileWriter(pathLog);
+				logBW = new BufferedWriter(logFW);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -181,8 +181,8 @@ public class StudentIO {
 		sb.append(s.getLastName() + ",");
 		sb.append(s.getStudentNumber() + ",");
 		sb.append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
-		bw.append(sb.toString() + "\n");
-		bw.flush();
+		logBW.append(sb.toString() + "\n");
+		logBW.flush();
 	}
 	
 	public static void setPath(String path, int day) {

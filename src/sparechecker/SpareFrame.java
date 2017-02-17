@@ -79,7 +79,9 @@ public class SpareFrame extends JFrame {
 		
 		JMenuBar menu = new JMenuBar();
 		JMenu edit = new JMenu("Edit");
+		edit.setFont(edit.getFont().deriveFont(Font.PLAIN, 14));
 		JMenuItem file1 = new JMenuItem("Edit Spare File Day 1");
+		file1.setFont(file1.getFont().deriveFont(Font.PLAIN, 14));
 		file1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -100,6 +102,7 @@ public class SpareFrame extends JFrame {
 			
 		});
 		JMenuItem file2 = new JMenuItem("Edit Spare File Day 2");
+		file2.setFont(file2.getFont().deriveFont(Font.PLAIN, 14));
 		file2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
