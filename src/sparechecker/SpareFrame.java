@@ -175,7 +175,11 @@ public class SpareFrame extends JFrame {
 						Image image = ImageIO.read(new File("images/" + s.getStudentNumber() + ".BMP"));
 						imageLabel.setIcon(new ImageIcon(image));
 					} catch (IOException e1) {
-						imageLabel.setIcon(null);
+						try {
+							imageLabel.setIcon(new ImageIcon(ImageIO.read(new File("images/default.png"))));
+						} catch (IOException e2) {
+							e2.printStackTrace();
+						}
 					}
 					repaint();
 				}	
