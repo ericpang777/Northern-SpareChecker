@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 public class StudentIO {
 	private static ArrayList<Student> students;
 	private static FileWriter fw;
@@ -137,8 +139,8 @@ public class StudentIO {
 			try {
 				fw = new FileWriter(pathLog, true);
 				bw = new BufferedWriter(fw);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(SpareFrame.getFrame(), "log.csv is currently open", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
