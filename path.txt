@@ -1,2 +1,0 @@
-C:\Users\ericp\OneDrive\Documents\Eclipse\Northern-SpareChecker\data\spare file day 1.csv
-C:\Users\ericp\OneDrive\Documents\Eclipse\Northern-SpareChecker\data\spare file day 2.csv
