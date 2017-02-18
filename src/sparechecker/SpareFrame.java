@@ -16,10 +16,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -30,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -254,20 +258,29 @@ public class SpareFrame extends JFrame {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
 				
-		btnSignIn = new JButton("Sign In");
+		btnSignIn = new JButton("Sign In (SPACE)");
 		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSignIn.setBounds(64, 402, 108, 31);
+		btnSignIn.setBounds(43, 402, 146, 31);
 		btnSignIn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					StudentIO.log(truePeriod, list.getSelectedValue());
+					StudentIO.log(activePeriod, list.getSelectedValue());
 					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}	
 		});
+		Action action = new AbstractAction("sign in") {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnSignIn.doClick();
+			}
+		};
+		action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke((char)KeyEvent.VK_SPACE));
+		btnSignIn.getActionMap().put("sign in", action);
+		btnSignIn.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put((KeyStroke)action.getValue(Action.ACCELERATOR_KEY), "sign in");
 		contentPane.add(btnSignIn);
 		btnSignIn.setVisible(false);
 		

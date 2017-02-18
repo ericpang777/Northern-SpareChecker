@@ -179,7 +179,8 @@ public class StudentIO {
 			}
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("Period " + (char)(period + 65) + ",");
+		int day = (period / 4) + 1;
+		sb.append("Day " + day + " Period " + (period % 4 + 1) + ",");
 		sb.append(s.getFirstName() + ",");
 		sb.append(s.getLastName() + ",");
 		sb.append(s.getStudentNumber() + ",");
