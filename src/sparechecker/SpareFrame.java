@@ -43,6 +43,7 @@ public class SpareFrame extends JFrame {
 	private JButton btnSignIn;
 	private static JFrame spareFrame;
 	private JList<Student> list; 
+	
 	//Lists of students in each period
 	private static ArrayList<ArrayList<Student>> periods = new ArrayList<ArrayList<Student>>();
 	
@@ -99,7 +100,6 @@ public class SpareFrame extends JFrame {
 					}
 				}
 			}
-			
 		});
 		JMenuItem file2 = new JMenuItem("Edit Spare File Day 2");
 		file2.setFont(file2.getFont().deriveFont(Font.PLAIN, 14));
@@ -120,7 +120,6 @@ public class SpareFrame extends JFrame {
 					}
 				}
 			}
-			
 		});
 		edit.add(file1);
 		edit.add(file2);

@@ -79,9 +79,11 @@ public class StudentIO {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(SpareFrame.getFrame(), "Cannot find day 1 spare file", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(SpareFrame.getFrame(), pathSpareFile1 + "not found", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			
 		}
 		try {
 			FileReader fr = new FileReader(pathSpareFile2);
@@ -112,9 +114,11 @@ public class StudentIO {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			JOptionPane.showMessageDialog(SpareFrame.getFrame(), "Cannot find day 2 spare file", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(SpareFrame.getFrame(), pathSpareFile2 + "not found", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			
 		}
 	}
 
