@@ -49,6 +49,7 @@ public class SpareFrame extends JFrame {
 	
 	//0 for A, 7 for H
 	private static int activePeriod = 0;
+	private static int truePeriod = 0;
 	
 	/**
 	 * Launch the application.
@@ -95,7 +96,7 @@ public class SpareFrame extends JFrame {
 					StudentIO.read();
 					sortStudents();
 					((DefaultListModel<Student>)list.getModel()).removeAllElements();
-					for(Student s : periods.get(activePeriod)) {
+					for(Student s : periods.get(truePeriod)) {
 						((DefaultListModel<Student>)list.getModel()).addElement(s);
 					}
 				}
@@ -115,7 +116,7 @@ public class SpareFrame extends JFrame {
 					StudentIO.read();
 					sortStudents();
 					((DefaultListModel<Student>)list.getModel()).removeAllElements();
-					for(Student s : periods.get(activePeriod)) {
+					for(Student s : periods.get(truePeriod)) {
 						((DefaultListModel<Student>)list.getModel()).addElement(s);
 					}
 				}
@@ -206,9 +207,9 @@ public class SpareFrame extends JFrame {
 		JTextPane periodtxtpn = new JTextPane();
 		periodtxtpn.setBackground(Color.LIGHT_GRAY);
 		periodtxtpn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		periodtxtpn.setText("Period " + (char)(activePeriod + 65));
+		periodtxtpn.setText("Day 1 Period 1");
 		periodtxtpn.setEditable(false);
-		periodtxtpn.setBounds(295, 13, 77, 33);
+		periodtxtpn.setBounds(297, 13, 123, 33);
 		contentPane.add(periodtxtpn);
 		
 		//Shows list of all spare students
@@ -249,7 +250,7 @@ public class SpareFrame extends JFrame {
 		list.setCellRenderer(new StripeRenderer());
 		list.setFont(new Font("Segoe UI", Font.PLAIN, 17));
 		scrollPane.setViewportView(list);	
-		for(Student s : periods.get(activePeriod)) {
+		for(Student s : periods.get(truePeriod)) {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
 				
@@ -260,7 +261,7 @@ public class SpareFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					StudentIO.log(activePeriod, list.getSelectedValue());
+					StudentIO.log(truePeriod, list.getSelectedValue());
 					signInTime.setText("Last Sign In: \n" + new SimpleDateFormat("yyyy/MM/dd hh:mm:ss a").format(new Date()));
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -286,7 +287,7 @@ public class SpareFrame extends JFrame {
 			public void keyTyped(KeyEvent e) {
 				if(searchField.getText() != null) {
 					((DefaultListModel<Student>)list.getModel()).removeAllElements();
-					for(Student s : periods.get(activePeriod)) {
+					for(Student s : periods.get(truePeriod)) {
 						if(s.getFirstName().toLowerCase().contains(searchField.getText().toLowerCase()) 	|| 
 								s.getLastName().toLowerCase().contains(searchField.getText().toLowerCase()) ||
 								(s.getFirstName() + " " + s.getLastName()).toLowerCase().contains(searchField.getText().toLowerCase())) {
@@ -300,17 +301,19 @@ public class SpareFrame extends JFrame {
 		
 		//Left arrow button that moves the period back by one
 		BasicArrowButton leftArrowButton = new BasicArrowButton(BasicArrowButton.WEST);
-		leftArrowButton.setBounds(384, 13, 37, 33);
+		leftArrowButton.setBounds(432, 13, 37, 33);
 		leftArrowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Prevent negatives
 				if(activePeriod == 0)
-					activePeriod += 8;
+					activePeriod += 16;
 				activePeriod--;
-				periodtxtpn.setText("Period " + (char)(activePeriod + 65));
+				int day = (activePeriod / 4) + 1;
+				periodtxtpn.setText("Day " + day + " Period " + (activePeriod % 4 + 1));
+				adjustTruePeriod();
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(activePeriod)) {
+				for(Student s : periods.get(truePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 				btnSignIn.setVisible(false);
@@ -320,17 +323,19 @@ public class SpareFrame extends JFrame {
 		
 		//Right arrow button that moves the period forward by one
 		BasicArrowButton rightArrowButton = new BasicArrowButton(BasicArrowButton.EAST);
-		rightArrowButton.setBounds(423, 13, 37, 33);
+		rightArrowButton.setBounds(468, 13, 37, 33);
 		rightArrowButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Don't go over 7
-				if(activePeriod == 7)
-					activePeriod -= 8;
+				//Don't go over 15
+				if(activePeriod == 15)
+					activePeriod -= 16;
 				activePeriod++;
-				periodtxtpn.setText("Period " + (char)(activePeriod + 65));
+				int day = (activePeriod / 4) + 1;
+				periodtxtpn.setText("Day " + day + " Period " + (activePeriod % 4 + 1));
+				adjustTruePeriod();
 				((DefaultListModel<Student>)list.getModel()).removeAllElements();
-				for(Student s : periods.get(activePeriod)) {
+				for(Student s : periods.get(truePeriod)) {
 					((DefaultListModel<Student>)list.getModel()).addElement(s);
 				}
 				btnSignIn.setVisible(false);
@@ -352,5 +357,27 @@ public class SpareFrame extends JFrame {
 	
 	public static JFrame getFrame() {
 		return spareFrame;
+	}
+	
+	private void adjustTruePeriod() {
+		if(activePeriod > 7) {
+			truePeriod = activePeriod - 8;
+			switch(activePeriod) {
+				case 10:
+					truePeriod = 3;
+					break;
+				case 11:
+					truePeriod = 2;
+					break;
+				case 14:
+					truePeriod = 7;
+					break;
+				case 15:
+					truePeriod = 6;
+					break;
+			}
+		} else {
+			truePeriod = activePeriod;
+		}
 	}
 }

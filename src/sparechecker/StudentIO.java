@@ -156,7 +156,6 @@ public class StudentIO {
 		} catch (FileNotFoundException e) {
 			return lastDate;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return lastDate;
