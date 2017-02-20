@@ -15,6 +15,11 @@ import java.util.Date;
 
 import javax.swing.JOptionPane;
 
+/**
+ * The StudentIO class manages the reading and writing to files.
+ * @author Eric Pang
+ * @version 1.0
+ */
 public class StudentIO {
 	private static ArrayList<Student> students;
 	private static FileWriter logFW;
@@ -24,7 +29,11 @@ public class StudentIO {
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
 	private static String pathFile = "path.txt";
 	private static String pathLog = "log.csv";
-
+	
+	/**
+	 * Creates path.txt that holds the file path for both spare files.
+	 * If there is, read the paths in the file and set them.
+	 */
 	public static void createPath() {
 		try {
 			FileReader pathFR = new FileReader(pathFile);
@@ -48,6 +57,9 @@ public class StudentIO {
 		}	
 	}
 	
+	/**
+	 * Reads the two spare csv files.
+	 */
 	public static void read() {
 		students = new ArrayList<>();
 		try {
@@ -83,7 +95,7 @@ public class StudentIO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e) {
-			
+			//If part of the path.txt is blank
 		}
 		try {
 			FileReader fr = new FileReader(pathSpareFile2);
@@ -118,10 +130,15 @@ public class StudentIO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (NullPointerException e) {
-			
+			//If part of the path.txt is blank
 		}
 	}
 
+	/**
+	 * Sorts students into their spare periods
+	 * @param list - arraylist in student arraylist of arraylists
+	 * @param period - period of spare
+	 */
 	public static void sortByPeriod(ArrayList<Student> list, int period) {
 		for (Student s : students) {
 			if (s.hasSpare(period)) {
@@ -130,6 +147,10 @@ public class StudentIO {
 		}
 	}
 
+	/**
+	 * Sorts students alphabetically
+	 * @param list - arraylist to sort
+	 */
 	public static void sortByFirstName(ArrayList<Student> list) {
 		Collections.sort(list, new Comparator<Student>() {
 			@Override
@@ -139,6 +160,12 @@ public class StudentIO {
 		});
 	}
 
+	/**
+	 * Gets the last sign in time of a student.
+	 * Returns a blank string if not found
+	 * @param s - student to find
+	 * @return last sign in time
+	 */
 	public static String lastSignIn(Student s) {
 		String lastDate = "";
 		try {
@@ -161,6 +188,12 @@ public class StudentIO {
 		return lastDate;
 	}
 	
+	/**
+	 * Logs when a student is signed in.
+	 * @param period - period of sign in
+	 * @param s - student
+	 * @throws IOException
+	 */
 	public static void log(int period, Student s) throws IOException {
 		if(new File(pathLog).isFile()) {
 			try {
@@ -189,6 +222,11 @@ public class StudentIO {
 		logBW.flush();
 	}
 	
+	/**
+	 * Sets the new path of a spare file
+	 * @param path - path of new file
+	 * @param day - the day the file correlates to
+	 */
 	public static void setPath(String path, int day) {
 		if(day == 1) 
 			pathSpareFile1 = path;

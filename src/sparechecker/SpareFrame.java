@@ -83,6 +83,7 @@ public class SpareFrame extends JFrame {
 		spareFrame = this;
 		this.setTitle("Spare Checker");
 		
+		//Menu bar and items
 		JMenuBar menu = new JMenuBar();
 		JMenu edit = new JMenu("Edit");
 		edit.setFont(edit.getFont().deriveFont(Font.PLAIN, 14));
@@ -183,6 +184,7 @@ public class SpareFrame extends JFrame {
 		doc = stuNumText.getStyledDocument();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		//Set transparent
 		stuNumText.setOpaque(false);
 		stuNumText.setBorder(BorderFactory.createEmptyBorder());
 		stuNumText.setBackground(new Color(0,0,0,0));
@@ -191,12 +193,13 @@ public class SpareFrame extends JFrame {
 		//Shows last sign in time of the student
 		JTextPane signInTime = new JTextPane();
 		signInTime.setEditable(false);
-		signInTime.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		signInTime.setBounds(12, 353, 214, 40);
+		signInTime.setFont(new Font("Segoe UI", Font.PLAIN, 17));
+		signInTime.setBounds(12, 353, 214, 57);
 		//Horizontally Center
 		doc = signInTime.getStyledDocument();
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+		//Set transparent
 		signInTime.setOpaque(false);
 		signInTime.setBorder(BorderFactory.createEmptyBorder());
 		signInTime.setBackground(new Color(0,0,0,0));
@@ -204,7 +207,7 @@ public class SpareFrame extends JFrame {
 		
 		//Makes list scrollable
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(246, 136, 334, 297);
+		scrollPane.setBounds(246, 136, 334, 324);
 		contentPane.add(scrollPane);
 		
 		//Shows the active period
@@ -257,10 +260,11 @@ public class SpareFrame extends JFrame {
 		for(Student s : periods.get(truePeriod)) {
 			((DefaultListModel<Student>)list.getModel()).addElement(s);
 		}
-				
+			
+		//Sign in button that has the space hotkey
 		btnSignIn = new JButton("Sign In (SPACE)");
 		btnSignIn.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnSignIn.setBounds(43, 402, 146, 31);
+		btnSignIn.setBounds(43, 413, 146, 31);
 		btnSignIn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -291,14 +295,12 @@ public class SpareFrame extends JFrame {
 		searchField.setColumns(10);
 		searchField.addKeyListener(new KeyListener() {
 			@Override
-			public void keyPressed(KeyEvent arg0) {}
+			public void keyPressed(KeyEvent arg0) {	}
 
 			@Override
-			public void keyReleased(KeyEvent arg0) {}
-
-			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyReleased(KeyEvent arg0) {
 				if(searchField.getText() != null) {
+					btnSignIn.setVisible(false);
 					((DefaultListModel<Student>)list.getModel()).removeAllElements();
 					for(Student s : periods.get(truePeriod)) {
 						if(s.getFirstName().toLowerCase().contains(searchField.getText().toLowerCase()) 	|| 
@@ -308,7 +310,10 @@ public class SpareFrame extends JFrame {
 						}
 					}
 				}	
-			}	
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) { }	
 		});
 		contentPane.add(searchField);
 		
@@ -356,7 +361,10 @@ public class SpareFrame extends JFrame {
 		});
 		contentPane.add(rightArrowButton);	
 	}
-	
+
+	/**
+	 * Sorts students into the 2d arraylist of size 8. For the 8 periods
+	 */
 	private static void sortStudents() {
 		periods.clear();
 		for(int i = 0; i < 8; i++) {
@@ -368,10 +376,17 @@ public class SpareFrame extends JFrame {
 		}
 	}
 	
+	/**
+	 * Gets JFrame of app
+	 * @return spareFrame
+	 */
 	public static JFrame getFrame() {
 		return spareFrame;
 	}
 	
+	/**
+	 * Changes the true period(used for StudentIO calculations) based on the current "active" period seen in app.
+	 */
 	private void adjustTruePeriod() {
 		if(activePeriod > 7) {
 			truePeriod = activePeriod - 8;
