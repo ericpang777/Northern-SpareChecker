@@ -27,7 +27,7 @@ public class StudentIO {
 	
 	private static String pathSpareFile1 = "data/spare file day 1.csv";
 	private static String pathSpareFile2 = "data/spare file day 2.csv";
-	private static String pathFile = "path.txt";
+	private static String pathStorage = "data/storage.txt";
 	private static String pathLog = "log.csv";
 	
 	/**
@@ -36,14 +36,14 @@ public class StudentIO {
 	 */
 	public static void createPath() {
 		try {
-			FileReader pathFR = new FileReader(pathFile);
+			FileReader pathFR = new FileReader(pathStorage);
 			BufferedReader pathBR = new BufferedReader(pathFR);
 			pathSpareFile1 = pathBR.readLine();
 			pathSpareFile2 = pathBR.readLine();
 			pathBR.close();
 		} catch (FileNotFoundException e) {
 			try {
-				FileWriter pathFW = new FileWriter(pathFile);
+				FileWriter pathFW = new FileWriter(pathStorage);
 				BufferedWriter pathBW = new BufferedWriter(pathFW);
 				pathBW.append(pathSpareFile1 + "\n");
 				pathBW.append(pathSpareFile2);
@@ -96,6 +96,8 @@ public class StudentIO {
 			e.printStackTrace();
 		} catch (NullPointerException e) {
 			//If part of the path.txt is blank
+		} catch (NumberFormatException e) {
+			//If first value cannot be parsed, meaning something is wrong with csv
 		}
 		try {
 			FileReader fr = new FileReader(pathSpareFile2);
@@ -131,6 +133,8 @@ public class StudentIO {
 			e.printStackTrace();
 		} catch (NullPointerException e) {
 			//If part of the path.txt is blank
+		} catch (NumberFormatException e) {
+			//If first value cannot be parsed, meaning something is wrong with csv
 		}
 	}
 
@@ -233,7 +237,7 @@ public class StudentIO {
 		if(day == 2)
 			pathSpareFile2 = path;
 		try {
-			FileWriter pathFW = new FileWriter(pathFile);
+			FileWriter pathFW = new FileWriter(pathStorage);
 			BufferedWriter pathBW = new BufferedWriter(pathFW);
 			pathBW.append(pathSpareFile1);
 			pathBW.newLine();

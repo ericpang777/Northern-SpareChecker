@@ -42,6 +42,11 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+/**
+ * The SpareFrame class displays the GUI
+ * @author Eric Pang
+ * @version 1.0
+ */
 public class SpareFrame extends JFrame {
 	private JPanel contentPane;
 	private JButton btnSignIn;
