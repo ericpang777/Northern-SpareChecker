@@ -221,7 +221,7 @@ public class SpareFrame extends JFrame {
 		periodtxtpn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		periodtxtpn.setText("Day 1 Period 1");
 		periodtxtpn.setEditable(false);
-		periodtxtpn.setBounds(297, 13, 123, 33);
+		periodtxtpn.setBounds(297, 13, 125, 33);
 		contentPane.add(periodtxtpn);
 		
 		//Shows list of all spare students
